@@ -1,0 +1,7 @@
+<div class="search-container">
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search items..."
+        class="search-input" />
+    <button class="search-btn" (click)="onSearch()">
+        <img src="../../assets/search-img.png" alt="search" />
+    </button>
+</div>

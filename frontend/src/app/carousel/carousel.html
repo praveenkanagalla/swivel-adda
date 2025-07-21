@@ -1,0 +1,13 @@
+<div class="slider-container">
+    <ngx-slick-carousel class="carousel baneer-content" #slickModal="slick-carousel" [config]="slideConfig">
+        @for (slide of slides; track slide.img) {
+        <div ngxSlickItem class="slide">
+            <img src="{{ slide.img }}" alt="img" class="img-style">
+        </div>
+        }
+    </ngx-slick-carousel>
+    <div class="baneer-text">
+        <h2 class="banner-title">Hi, Welcome to Swivel Adda!!!</h2>
+        <h5 class="banner-title-1">where every cup sparks a conversation...</h5>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="auth-container">
+    <div class="auth-content">
+        <!-- Login Form -->
+        <div *ngIf="isLoginMode; else registerMode">
+            <h2 class="heading">Login</h2>
+            <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+                <input name="email" [(ngModel)]="loginData.email" type="email" placeholder="Email" required email
+                    #email="ngModel" />
+                <div *ngIf="email.invalid && email.touched" class="error">
+                    Valid email is required
+                </div>
+
+                <input name="password" [(ngModel)]="loginData.password" type="password" placeholder="Password" required
+                    minlength="6" #password="ngModel" />
+                <div *ngIf="password.invalid && password.touched" class="error">
+                    Password (min 6 chars) required
+                </div>
+
+                <button type="submit" [disabled]="loginForm.invalid">Login</button>
+            </form>
+            <p>
+                Don't have an account?
+                <a class="link-btn" routerLink="/" (click)="toggleMode()">Register</a>
+            </p>
+        </div>
+
+        <!-- Register Form -->
+        <ng-template #registerMode>
+            <h2 class="heading">Register</h2>
+            <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)">
+                <input name="name" [(ngModel)]="registerData.name" type="text" placeholder="Full Name" required
+                    minlength="3" #name="ngModel" />
+                <div *ngIf="name.invalid && name.touched" class="error">
+                    Name is required (min 3 characters)
+                </div>
+
+                <input name="email" [(ngModel)]="registerData.email" type="email" placeholder="Email" required email
+                    #regEmail="ngModel" />
+                <div *ngIf="regEmail.invalid && regEmail.touched" class="error">
+                    Valid email is required
+                </div>
+
+                <input name="password" [(ngModel)]="registerData.password" type="password" placeholder="Password"
+                    required minlength="6" #regPassword="ngModel" />
+                <div *ngIf="regPassword.invalid && regPassword.touched" class="error">
+                    Password (min 6 characters) required
+                </div>
+
+                <button type="submit" [disabled]="registerForm.invalid">Register</button>
+            </form>
+            <p>
+                Already have an account?
+                <a class="link-btn" routerLink="/" (click)="toggleMode()">Login</a>
+            </p>
+        </ng-template>
+    </div>
+</div>

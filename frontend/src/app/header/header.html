@@ -1,0 +1,28 @@
+<header class="header-container">
+	<a routerLink="/home"><img (click)="closeMenu()" class="logo" src="/assets/logo/logo-1.png" alt="logo"></a>
+	<div class="nav-links-content" [class.menuClass]="menuVariable">
+		<i class="nav-icon close-icon" (click)="closeMenu()">X</i>
+		<ul class="nav-menu">
+			<li><a (click)="closeMenu()" routerLink="/about">About</a></li>
+			<li><a (click)="closeMenu()" routerLink="/prodects">Products</a></li>
+		</ul>
+	</div>
+	<div class="menu-phone-tab">
+		<a class="checkout-icon" routerLink="/checkout">🛒
+			<span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
+		</a>
+		<i class="nav-icon open-icon" (click)="openMenu()">
+			<div class="a"></div>
+			<div class="a"></div>
+			<div class="a"></div>
+		</i>
+
+	</div>
+	<div class="dropdown" (click)="dropdownOpen = !dropdownOpen">
+		<img class="logout" src="../../assets/user-1.png" alt="logo">
+		<div class="user-menu" *ngIf="dropdownOpen">
+			<p class="user-details">User Details</p>
+			<button class="user-btn">Logout</button>
+		</div>
+	</div>
+</header>

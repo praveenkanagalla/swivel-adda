@@ -1,0 +1,195 @@
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'poppins', sans-serif;
+}
+
+.header-container {
+	height: 80px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 2px solid #eee;
+	padding-left: 2%;
+	padding-right: 2%;
+	background-color: #682f12;
+}
+
+.logo-content {
+	text-decoration: none;
+}
+
+.logo {
+	height: 60px;
+	width: 120px;
+	border-radius: 10px
+}
+
+.nav-links-content {
+	flex: 1;
+	text-align: right;
+}
+
+.nav-links-content ul li {
+	list-style: none;
+	display: inline-block;
+	padding: 8px 12px;
+	position: relative;
+	cursor: pointer;
+}
+
+.nav-links-content ul li a {
+	color: #f1f1f1;
+	text-decoration: none;
+	font-size: 18px;
+}
+
+.nav-links-content ul li ::after {
+	content: '';
+	width: 0%;
+	height: 2px;
+	background-color: #f1f1f1;
+	display: block;
+	margin: auto;
+	transition: 0.5s;
+}
+
+.nav-icon {
+	display: none;
+}
+
+.a {
+	height: 3px;
+	width: 25px;
+	background-color: #f1f1f1;
+	margin-top: 4px;
+}
+
+.checkout-icon {
+	position: relative;
+	text-decoration: none;
+	font-size: 25px;
+}
+
+.cart-count {
+	position: absolute;
+	bottom: 10px;
+	text-decoration: none;
+	color: #fff;
+}
+
+.menu-phone-tab {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+}
+
+.logout {
+	width: 30px;
+	height: 30px;
+	margin-left: 15px;
+	cursor: pointer;
+	position: relative;
+}
+
+.user-menu {
+	width: 135px;
+	position: absolute;
+	top: 56px;
+	right: -30px;
+	z-index: 1;
+	text-align: center;
+	background-color: #682f12;
+}
+
+.user-details {
+	color: #fff;
+	font-size: 16px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.user-btn {
+	color: #682f12;
+	margin-bottom: 15px;
+	padding: 3px 20px;
+	background-color: #fff;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+@media screen and (max-width: 767px) {
+	.header-container {
+		height: 5rem;
+	}
+
+	.logo {
+		height: 60px;
+		width: 120px;
+	}
+
+	.text-box h1 {
+		font-size: 20px;
+	}
+
+	.nav-links-content ul li {
+		display: block;
+	}
+
+	.nav-links-content ul li a {
+		color: #eee;
+	}
+
+	.nav-links-content {
+		position: fixed;
+		background-color: #682f12;
+		height: 100vh;
+		width: 200px;
+		top: 0;
+		right: -200px;
+		text-align: left;
+		z-index: 2;
+		transition: 1s;
+	}
+
+	.nav-menu {
+		margin-top: 50px;
+	}
+
+	.menuClass {
+		right: 0;
+	}
+
+	.header-container .nav-icon {
+		display: block;
+		color: #eee;
+		margin: 5px;
+		font-size: 22px;
+		cursor: pointer;
+	}
+
+	.close-icon {
+		float: right;
+		padding: 10px;
+		margin: 10px 20px !important;
+	}
+
+	.nav-links-content ul {
+		padding: 30px;
+	}
+
+
+	.checkout-icon {
+		margin-right: 20px;
+	}
+
+	.logout {
+		margin-left: 0;
+		margin-right: 15px;
+	}
+
+}

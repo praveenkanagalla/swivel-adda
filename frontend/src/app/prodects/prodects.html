@@ -1,0 +1,26 @@
+<app-search (search)="onSearch($event)"></app-search>
+
+<ul class="card-container">
+    <li *ngFor="let food of filteredFoods">
+        <a class="card-content">
+            <img [src]="food.imageUrl" alt="img" />
+            <div class="prodect-content">
+                <div class="prodect-name">{{ food.name }}</div>
+                <span class="favorite" [class.not]="!food.favorite">❤️</span>
+                <div class="prodect-footer">
+                    <div class="making-time">
+                        <span>🕒</span>
+                        {{ food.makingTime }}
+                    </div>
+                    <div class="price">{{ food.price | currency: 'INR' }}</div>
+                </div>
+                <div class="button-content">
+                    <button (click)="addToCart(food)" class="add-card">
+                        Add to cart
+                    </button>
+                </div>
+            </div>
+        </a>
+    </li>
+    <div *ngIf="filteredFoods.length === 0">No matching items found.</div>
+</ul>

@@ -1,0 +1,36 @@
+<div class="checkout-container">
+    <div class="checkout-content">
+        <h2 class="checkout-heading">Your Cart 🛒</h2>
+
+        <div *ngIf="items.length; else emptyCart">
+            <ul>
+                <li *ngFor="let item of items; let i = index"
+                    style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <!-- Item Image -->
+                    <img class="checkout-img" src={{item.imageUrl}} alt="{{ item.name }}" />
+
+                    <!-- Item Details -->
+                    <div class="check-item-price" style="flex-grow: 1">
+                        {{ item.name }} <br> ₹{{ item.price }} × {{ item.quantity }}
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="checkout-btns">
+                        <button class="checkout-btn" (click)="decreaseQty(i)">-</button>
+                        <button class="checkout-btn" (click)="increaseQty(i)">+</button>
+                        <button class="checkout-btn-d" (click)="removeItem(i)">
+                            <img class="checkout-btn-d-img" src="../../assets/delete-icon.png" alt="search">
+                        </button>
+                    </div>
+                </li>
+            </ul>
+
+            <h3>Total: ₹{{ total }}</h3>
+            <button class="checkout-btn-payment" (click)="payNow()">Pay Now</button>
+        </div>
+
+        <ng-template #emptyCart>
+            <p>Your cart is empty.</p>
+        </ng-template>
+    </div>
+</div>
