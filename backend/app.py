@@ -31,6 +31,7 @@ def create_user_table():
 
 create_user_table()
 
+# ✅ REGISTER Endpoint
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -57,6 +58,7 @@ def register():
 
     return jsonify({"message": "Registration successful"}), 200
 
+# ✅ LOGIN Endpoint - returns name and email
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -64,18 +66,25 @@ def login():
     password = data.get('password')
 
     if not all([email, password]):
-        return jsonify({"message": "Email and password required"}), 400
+        return jsonify({"success": False, "message": "Email and password required"}), 400
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT id, name, email, password FROM users WHERE email = %s", (email,))
     user = cursor.fetchone()
     conn.close()
 
     if not user or user['password'] != password:
-        return jsonify({"message": "Invalid credentials"}), 401
+        return jsonify({"success": False, "message": "Invalid credentials"}), 401
 
-    return jsonify({"message": f"Welcome back, {user['name']}!"}), 200
+    #Don't send password back
+    user.pop('password', None)
+
+    return jsonify({
+        "success": True,
+        "user": user,
+        "token": "dummy-token"
+    }), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -13,6 +13,7 @@
 	padding-left: 2%;
 	padding-right: 2%;
 	background-color: #682f12;
+	position: relative;
 }
 
 .logo-content {
@@ -85,7 +86,7 @@
 
 }
 
-.logout {
+.user-icon {
 	width: 30px;
 	height: 30px;
 	margin-left: 15px;
@@ -93,33 +94,32 @@
 	position: relative;
 }
 
-.user-menu {
-	width: 135px;
-	position: absolute;
-	top: 56px;
-	right: -30px;
-	z-index: 1;
-	text-align: center;
-	background-color: #682f12;
+.modal-content {
+	text-align: left;
 }
 
-.user-details {
-	color: #fff;
-	font-size: 16px;
-	padding: 10px;
-	cursor: pointer;
-}
+
 
 .user-btn {
-	color: #682f12;
+	color: #fff;
 	margin-bottom: 15px;
 	padding: 3px 20px;
-	background-color: #fff;
+	background-color: #682f12;
 	outline: none;
 	border: none;
 	border-radius: 5px;
 	font-size: 16px;
 	font-weight: bold;
+	display: block;
+}
+
+.open-btn {
+	background-color: steelblue;
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	border-radius: 4px;
 }
 
 @media screen and (max-width: 767px) {
@@ -187,7 +187,7 @@
 		margin-right: 20px;
 	}
 
-	.logout {
+	.user-icon {
 		margin-left: 0;
 		margin-right: 15px;
 	}

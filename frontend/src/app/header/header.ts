@@ -1,24 +1,49 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CartService } from '../services/cart-service';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+import { CartService } from '../services/cart-service';
+import { Modal } from '../modal/modal';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   templateUrl: './header.html',
-  styleUrls: ['./header.css'],  // ✅ Fixed from styleUrl
-  imports: [RouterModule, CommonModule, FormsModule]
+  styleUrls: ['./header.css'],
+  imports: [CommonModule, RouterModule, Modal]
 })
-export class Header implements OnInit {
-  menuVariable: boolean = false;
+export class Header {
+  menuVariable = false;
+  dropdownOpen = false;
+  showUserModal = false;
   cartCount = 0;
-  clickedOutside = false;
+  userData: any = null; // ✅ Declare to hold user info
 
-  constructor(private cartService: CartService, private elementRef: ElementRef) { }
+  constructor(
+    private cartService: CartService,
+    private elementRef: ElementRef,
+    private router: Router
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    // ✅ Load user from localStorage
+    const savedUser = localStorage.getItem('user');
+    if (savedUser && savedUser !== 'undefined') {
+      try {
+        this.userData = JSON.parse(savedUser);
+      } catch (err) {
+        console.error('Failed to parse user:', savedUser);
+        this.userData = null;
+      }
+    }
+
+    // ✅ Check if we should auto-show modal
+    const showModal = localStorage.getItem('showModal');
+    if (showModal === 'true') {
+      this.showUserModal = true;
+      localStorage.removeItem('showModal');
+    }
+
+    // ✅ Load cart count
     this.cartService.cartItems$.subscribe(items => {
       this.cartCount = items.reduce((count, item) => count + item.quantity, 0);
     });
@@ -26,32 +51,37 @@ export class Header implements OnInit {
 
   openMenu() {
     this.menuVariable = true;
-    console.log("Open Menu...");
   }
 
   closeMenu() {
     this.menuVariable = false;
-    console.log("Close Menu...");
+  }
+
+  openModal() {
+    this.showUserModal = true;
+  }
+
+  closeModal() {
+    this.showUserModal = false;
   }
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const targetElement = event.target as HTMLElement;
-    const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-    this.clickedOutside = !clickedInside;
+  handleOutsideClick(event: MouseEvent) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target as Node);
 
-    if (!clickedInside && this.menuVariable) {
-      this.closeMenu();
-    }
-  }
-
-  dropdownOpen = false;
-
-  @HostListener('window:click', ['$event'])
-  onWindowClick(event: Event) {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.dropdown')) {
+    if (!clickedInside) {
       this.dropdownOpen = false;
+      this.menuVariable = false;
+      this.showUserModal = false;
     }
   }
+
+  logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.userData = null;
+    this.closeModal();
+    this.router.navigate(['/login']);
+  }
+
 }

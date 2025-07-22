@@ -29,12 +29,16 @@ export class Auth {
     this.http.post('http://localhost:5000/login', this.loginData).subscribe(
       (res: any) => {
         if (res.success) {
+          const user = {
+            name: res.user.name,
+            email: res.user.email
+          };
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('token', res.token);
+          this.router.navigate(['/home']);
 
         } else {
           alert(res.message);
-          localStorage.setItem('user', JSON.stringify(res.user));
-          localStorage.setItem('token', res.token);
-          this.router.navigate(['/home']);
         }
       },
       (error) => {
@@ -69,5 +73,6 @@ export class Auth {
       }
     );
   }
+
 
 }

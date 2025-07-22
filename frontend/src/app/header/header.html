@@ -1,5 +1,6 @@
 <header class="header-container">
 	<a routerLink="/home"><img (click)="closeMenu()" class="logo" src="/assets/logo/logo-1.png" alt="logo"></a>
+
 	<div class="nav-links-content" [class.menuClass]="menuVariable">
 		<i class="nav-icon close-icon" (click)="closeMenu()">X</i>
 		<ul class="nav-menu">
@@ -7,22 +8,26 @@
 			<li><a (click)="closeMenu()" routerLink="/prodects">Products</a></li>
 		</ul>
 	</div>
+
 	<div class="menu-phone-tab">
 		<a class="checkout-icon" routerLink="/checkout">🛒
 			<span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
 		</a>
+
+		<div class="dropdown">
+			<img mat-button (click)="openModal()" class="user-icon" src="../../assets/user-1.png" alt="user">
+			<app-modal class="modal-content" *ngIf="showUserModal" (closed)="closeModal()">
+				<div class="user-details">
+					<h2>User Name: {{ userData?.name }}</h2>
+					<p>Email: {{ userData?.email }}</p>
+				</div>
+				<button class="user-btn" (click)="logout()">Logout</button>
+			</app-modal>
+		</div>
 		<i class="nav-icon open-icon" (click)="openMenu()">
 			<div class="a"></div>
 			<div class="a"></div>
 			<div class="a"></div>
 		</i>
-
-	</div>
-	<div class="dropdown" (click)="dropdownOpen = !dropdownOpen">
-		<img class="logout" src="../../assets/user-1.png" alt="logo">
-		<div class="user-menu" *ngIf="dropdownOpen">
-			<p class="user-details">User Details</p>
-			<button class="user-btn">Logout</button>
-		</div>
 	</div>
 </header>
