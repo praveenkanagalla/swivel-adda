@@ -17,9 +17,11 @@
 		<div class="dropdown">
 			<img mat-button (click)="openModal()" class="user-icon" src="../../assets/user-1.png" alt="user">
 			<app-modal class="modal-content" *ngIf="showUserModal" (closed)="closeModal()">
+				<img class="modal-user-icon" src="../../assets/user-1.png" alt="user">
 				<div class="user-details">
-					<h2>User Name: {{ userData?.name }}</h2>
-					<p>Email: {{ userData?.email }}</p>
+					<h2 class="user-details-heading">User Details:-</h2>
+					<p class="user-details-p">User Name: {{ userData?.name }}</p>
+					<p class="user-details-p">Email: {{ userData?.email }}</p>
 				</div>
 				<button class="user-btn" (click)="logout()">Logout</button>
 			</app-modal>
