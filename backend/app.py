@@ -83,7 +83,7 @@ def login():
     return jsonify({
         "success": True,
         "user": user,
-        "token": "dummy-token"
+        "token": "token"
     }), 200
 
 if __name__ == '__main__':
