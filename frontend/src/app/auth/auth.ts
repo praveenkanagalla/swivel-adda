@@ -1,23 +1,29 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FormsModule, NgForm } from '@angular/forms';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+
+// Correct environment import
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './auth.html',
-  styleUrls: ['./auth.css'] // 🔧 Corrected this
+  styleUrls: ['./auth.css']
 })
 export class Auth {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   isLoginMode = true;
 
   loginData = { email: '', password: '' };
   registerData = { name: '', email: '', password: '' };
 
-  constructor(private http: HttpClient, private router: Router) { }
+  private api = environment.apiUrl;
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -26,8 +32,8 @@ export class Auth {
   onLogin(form: NgForm) {
     if (form.invalid) return;
 
-    this.http.post('http://localhost:5000/login', this.loginData).subscribe(
-      (res: any) => {
+    this.http.post(`${this.api}/login`, this.loginData).subscribe({
+      next: (res: any) => {
         if (res.success) {
           const user = {
             name: res.user.name,
@@ -40,34 +46,29 @@ export class Auth {
           alert(res.message);
         }
       },
-      (error) => {
-        console.error('Login error:', error);
-        alert(error.error?.message || 'Login failed.');
+      error: (err) => {
+        console.error('Login error:', err);
+        alert(err.error?.message || 'Login failed.');
       }
-    );
+    });
   }
 
   onRegister(form: NgForm) {
     if (form.invalid) return;
 
-    console.log('Submitting registerData:', this.registerData);
-
-    this.http.post('http://localhost:5000/register', this.registerData).subscribe(
-      (res: any) => {
+    this.http.post(`${this.api}/register`, this.registerData).subscribe({
+      next: (res: any) => {
         alert(res.message);
-
         localStorage.setItem('user', JSON.stringify({
           name: this.registerData.name,
           email: this.registerData.email
         }));
-
-        // Optional: redirect after register
-        this.toggleMode(); // go back to login form
+        this.toggleMode(); // Switch to login mode after register
       },
-      err => {
+      error: (err) => {
         console.error('Register error:', err);
         alert(err.error?.message || 'Registration failed.');
       }
-    );
+    });
   }
 }
