@@ -5,11 +5,5 @@
             "src": "app.py",
             "use": "@vercel/python"
         }
-    ],
-    "router": [
-        {
-            "src": "/(.*)",
-            "dest": "app.py"
-        }
     ]
 }

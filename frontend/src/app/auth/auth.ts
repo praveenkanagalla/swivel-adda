@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './auth.html',
-  styleUrl: './auth.css'
+  styleUrls: ['./auth.css'] // 🔧 Corrected this
 })
 export class Auth {
   isLoginMode = true;
@@ -36,18 +36,16 @@ export class Auth {
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('token', res.token);
           this.router.navigate(['/home']);
-
         } else {
           alert(res.message);
         }
       },
       (error) => {
-        alert(error.error.message || 'Login failed.');
+        console.error('Login error:', error);
+        alert(error.error?.message || 'Login failed.');
       }
     );
   }
-
-
 
   onRegister(form: NgForm) {
     if (form.invalid) return;
@@ -59,20 +57,17 @@ export class Auth {
         alert(res.message);
 
         localStorage.setItem('user', JSON.stringify({
-          username: this.registerData.name,
-          email: this.registerData.email,
-          password: this.registerData.password
-          // token: res.token
+          name: this.registerData.name,
+          email: this.registerData.email
         }));
 
-        console.log('Data saved to localStorage');
+        // Optional: redirect after register
+        this.toggleMode(); // go back to login form
       },
       err => {
-        console.error('Error occurred:', err);
-        alert(err.error.message);
+        console.error('Register error:', err);
+        alert(err.error?.message || 'Registration failed.');
       }
     );
   }
-
-
 }
