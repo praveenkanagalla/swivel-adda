@@ -34,6 +34,5 @@ export class Prodects implements OnInit {
 
   addToCart(product: Foods) {
     this.cartService.addToCart(product);
-    alert(`${product.name} added to cart`);
   }
 }

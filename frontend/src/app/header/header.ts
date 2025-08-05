@@ -76,12 +76,14 @@ export class Header {
     }
   }
 
+
   logout() {
-    localStorage.removeItem('user');
     localStorage.removeItem('token');
-    this.userData = null;
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    localStorage.clear();
+    // Redirect to login page
     this.closeModal();
     this.router.navigate(['/login']);
   }
-
 }

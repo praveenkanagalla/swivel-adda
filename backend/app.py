@@ -1,21 +1,22 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import mysql.connector
-from dotenv import load_dotenv
-load_dotenv()
+import jwt
+import datetime
 
 app = Flask(__name__)
 CORS(app)
 
-# Database connection function
-import os
+# Secret key for JWT token
+SECRET_KEY = 'PRA24@123ab' 
 
+# Database connection function
 def get_db_connection():
     return mysql.connector.connect(
-        host=os.getenv('DB_HOST'),
-        user=os.getenv('DB_USER'),
-        password=os.getenv('DB_PASSWORD'),
-        database=os.getenv('DB_NAME')
+        host='localhost',
+        user='root',
+        password='PRA24@123ab',
+        database='userdata'
     )
 
 # Ensure table exists
@@ -35,7 +36,6 @@ def create_user_table():
 
 create_user_table()
 
-# ✅ REGISTER Endpoint
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -62,7 +62,6 @@ def register():
 
     return jsonify({"message": "Registration successful"}), 200
 
-# ✅ LOGIN Endpoint - returns name and email
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -70,25 +69,32 @@ def login():
     password = data.get('password')
 
     if not all([email, password]):
-        return jsonify({"success": False, "message": "Email and password required"}), 400
+        return jsonify({"message": "Email and password required"}), 400
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT id, name, email, password FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     user = cursor.fetchone()
     conn.close()
 
     if not user or user['password'] != password:
-        return jsonify({"success": False, "message": "Invalid credentials"}), 401
+        return jsonify({"message": "Invalid credentials"}), 401
 
-    #Don't send password back
-    user.pop('password', None)
+    # ✅ Generate JWT token
+    payload = {
+        'user_id': user['id'],
+        'email': user['email'],
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
     return jsonify({
-        "success": True,
-        "user": user,
-        "token": "token"
+        "message": f"Welcome back, {user['name']}!",
+        "token": token,
+        "name": user['name'],
+        "email": user['email']
     }), 200
 
+    
 if __name__ == '__main__':
     app.run(debug=True)

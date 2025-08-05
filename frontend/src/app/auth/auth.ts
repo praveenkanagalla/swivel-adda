@@ -1,29 +1,23 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
-// Correct environment import
-import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './auth.html',
-  styleUrls: ['./auth.css']
+  styleUrl: './auth.css'
 })
 export class Auth {
-  private http = inject(HttpClient);
-  private router = inject(Router);
-
   isLoginMode = true;
 
   loginData = { email: '', password: '' };
   registerData = { name: '', email: '', password: '' };
 
-  private api = environment.apiUrl;
+  constructor(private http: HttpClient, private router: Router) { }
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -32,23 +26,18 @@ export class Auth {
   onLogin(form: NgForm) {
     if (form.invalid) return;
 
-    this.http.post(`${this.api}/login`, this.loginData).subscribe({
+    this.http.post('http://localhost:5000/login', this.loginData).subscribe({
       next: (res: any) => {
-        if (res.success) {
-          const user = {
-            name: res.user.name,
-            email: res.user.email
-          };
-          localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('token', res.token);
-          this.router.navigate(['/home']);
-        } else {
-          alert(res.message);
-        }
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('name', res.name);
+        localStorage.setItem('email', res.email);
+
+        // Navigate to home/dashboard after login
+        this.router.navigate(['/home']);
       },
       error: (err) => {
-        console.error('Login error:', err);
-        alert(err.error?.message || 'Login failed.');
+        console.error('Login failed', err);
+        alert(err.error.message || 'Login failed');
       }
     });
   }
@@ -56,18 +45,19 @@ export class Auth {
   onRegister(form: NgForm) {
     if (form.invalid) return;
 
-    this.http.post(`${this.api}/register`, this.registerData).subscribe({
+    this.http.post('http://localhost:5000/register', this.registerData).subscribe({
       next: (res: any) => {
-        alert(res.message);
-        localStorage.setItem('user', JSON.stringify({
-          name: this.registerData.name,
-          email: this.registerData.email
-        }));
-        this.toggleMode(); // Switch to login mode after register
+        alert(res.message || 'Registration successful');
+
+        // Optional: Switch to login mode after successful registration
+        this.toggleMode();
+
+        // Clear form
+        this.registerData = { name: '', email: '', password: '' };
       },
       error: (err) => {
-        console.error('Register error:', err);
-        alert(err.error?.message || 'Registration failed.');
+        console.error('Registration error:', err);
+        alert(err.error.message || 'Registration failed');
       }
     });
   }
